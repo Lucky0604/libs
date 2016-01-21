@@ -73,10 +73,43 @@ function $(selector) {
                 if (context.getElementsByClassName) {
                     result = context.getElementsByClassName(className);
                 } else {
-                    
+                    var temp = context.getElementsByTagName('*');
+                    for (var i = 0, len = temp.length; i < len; i ++) {
+                        var node = temp[i];
+                        if (hasClass(node, className)) {
+                            result.push(node);
+                        }
+                    }
+                };
+                return result;
+            },
+
+            tag: function(tag) {
+                return context.getElementsByTagName(tag);
+            },
+
+            attribute: function(tag, key, value) {
+                var result = [];
+                var temp = context.getElementsByTagName(tag || '*');
+
+                for (var i = 0, len = temp.length; i < len; i ++) {
+                    var node = temp[i];
+                    if (value) {
+                        var v = node.getAttribute(key);
+                        (v === value) && result.push(node);
+                    } else if (node.hasAttribute(key)) {
+                        result.push(node);
+                    }
                 }
+                return result;
             }
 
-        }
+        };
+        var ret = direct(part, actions);
+
+        // to array
+        ret = [].slice.call(ret);
+
+        return parts[0] && ret[0] ? filterParent(parts, ret): ret;
     }
 }
