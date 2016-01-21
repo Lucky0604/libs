@@ -57,4 +57,8 @@ function $(selector) {
     	}
     	return actions[fn].apply(null, params);
     }
+
+    function find(parts, context) {
+        var part = parts.pop();
+    }
 }
