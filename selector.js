@@ -112,4 +112,55 @@ function $(selector) {
 
         return parts[0] && ret[0] ? filterParent(parts, ret): ret;
     }
+
+    function filterParents(parts, ret) {
+        var parentPart = parts.pop();
+        var result = [];
+
+        for (var i = 0, len = ret.length; i < len; i ++) {
+            var node = ret[i];
+            var p = node;
+
+            while (p = p.parentNode) {
+                var actions = {
+                    id: function(el, id) {
+                        return (el.id === id);
+                    },
+                    className: function(el, className) {
+                        return hasClass(el, className);
+                    },
+                    tag: function(el, tag) {
+                        return (el.tagName.toLowerCase() === tag);
+                    },
+                    attribute: function(el, tag, key, value) {
+                        var valid = true;
+                        if (tag) {
+                            valid = actions.tag(el, tag);
+                        }
+                        valid = valid && el.hasAttribute(key);
+                        if (value) {
+                            valid = valid && (value === el.getAttribute(key));
+                        }
+                        return valid;
+                    }
+                };
+                var matches = direct(parentPart, actions, p);
+                if (matches) {
+                    break;
+                }
+            }
+
+            if (matches) {
+                result.push(node);
+            }
+        }
+
+        return parts[0] && result[0] ? filterParents(parts, result) : result;
+    }
+    var result = find(selector.split(/\s+/), context);
+
+    return result;
 }
+
+
+
