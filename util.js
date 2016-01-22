@@ -81,3 +81,34 @@ function getPosition(element) {
     var box = element.getBoundingClientRect();
     return box;
 }
+
+
+
+// 为了便于查找绑定过的事件，增加了一级命名空间
+$.event = {
+    listeners: []
+};
+
+
+// 给一个element绑定一个针对event事件的响应，响应函数为listener
+$.event.addEvent = function(element, type, listener) {
+    type = type.replace(/^on/i, '').toLowerCase();
+
+    var lis = $.event.listeners;
+
+    var realListener = function(e) {
+        if (typeof listener === 'function') {
+            listener.call(element, e);
+        }
+    };
+
+    if (element.addEventListener) {
+        element.addEventListener(type, realListener, false);
+    } else if (element.attachEvent) {
+        element.attachEvent('on' + type, realListener);
+    }
+
+    lis[lis.length] = [element, type, listener, realListener];
+
+    return element;
+}
