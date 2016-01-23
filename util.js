@@ -177,3 +177,48 @@ $.event.delegateEvent = function(element, tag, eventName, listener) {
         }
     })
 }
+
+$.on = function(selector, event, listener) {
+    return $.event.addEvent($(selector), event, listener);
+}
+
+$.click = function(element, listener) {
+    return $.event.addEvent($(selector), 'click', listener);
+}
+
+$.un = function(selector, event, listener) {
+    return $.event.removeEvent($(selector), 'click', listener);
+}
+
+$.delegate = function(selector, tag, event, listener) {
+    return $.event.delegateEvent($(selector), tag, event, listener);
+}
+
+
+/**
+ * data structrue basic
+ */
+
+
+/**
+ * check the arr is an Array, return a bool value
+ *
+ * @param {any} [arr] [target]
+ * @return {boolean} [result]
+ */
+function isArray(arr) {
+    // under chrome, 'function' == typeof /a/ is true
+    return '[object Array]' === Object.prototype.toString.call(arr);
+}
+
+
+/**
+ * check the fn is a Function, return a bool value
+ *
+ * @param {any} [fn] [target]
+ * @return {boolean} [result]
+ */
+function isFunction(fn) {
+    // under chrome, 'function' == typeof /a/ is true
+    return '[object Function]' === Object.prototype.toString.call(fn);
+}
