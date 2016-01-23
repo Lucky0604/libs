@@ -112,3 +112,36 @@ $.event.addEvent = function(element, type, listener) {
 
     return element;
 }
+
+// 移除element对象对于event事件发生时执行listener的响应
+$.event.removeEvent = function(element, type, listener) {
+    type = type.replace(/^on/i, '').toLowerCase();
+
+    var lis = $.event.listeners;
+    var len = lis.length;
+
+    while (len --) {
+        var item = lis[len];
+
+        var isRemoveAll = !listener;
+
+        // listener存在时，移除element的所有以listener监听的type类型事件
+        // listener不存在时，移除element的所有type类型事件
+        if (item[1] === type
+            && item[0] === element
+            && (isRemoveAll || item[2] === listener)) {
+            var realListener = item[3];
+
+            if (element.removeEventListener) {
+                element.removeEventListener(type, realListener, false);
+            } else if (element.detachEvent) {
+                element.detachEvent('on' + type, realListener);
+            }
+
+            lis.splice(len, 1);
+        }
+    }
+
+    return element;
+};
+
