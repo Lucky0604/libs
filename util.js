@@ -145,3 +145,35 @@ $.event.removeEvent = function(element, type, listener) {
     return element;
 };
 
+
+
+// 实现对click事件的绑定
+function addClickEvent(element, listener) {
+    return $.event.addEvent(element, 'click', listener);
+}
+
+
+// 实现对于按Enter键时的事件绑定
+function addEnterEvent(element, listener) {
+    return $.event.addEvent(element, 'keypress', function(e) {
+        var event = e || window.event;
+        var keyCode = event.which || event.keyCode;
+
+        if (keyCode === 13) {
+            listener.call(element, event);
+        }
+    })
+}
+
+
+// 事件代理
+$.event.delegateEvent = function(element, tag, eventName, listener) {
+    $.event.addEvent(element, eventName, function(e) {
+        var event = e || window.event;
+        var target = event.target || event.srcElement;
+
+        if (target && target.tagName === tag.toUpperCase()) {
+            listener.call(target, event);
+        }
+    })
+}
