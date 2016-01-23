@@ -64,3 +64,38 @@ function isPlain(obj) {
     for (key in obj) {};
     return key === undefined || hasOwnProperty.call(obj, key);
 }
+
+
+/**
+ * 对一个object进行深度拷贝
+ *
+ * 使用递归来实现一个深度克隆，可以复制一个目标对象，返回一个完整拷贝
+ * 被复制的对象类型会被限制为数字、字符串、布尔、日期、数组、Object对象。不会包含函数、正则对象等
+ *
+ * @param  {Object} source 需要进行拷贝的对象
+ * @return {Object} 拷贝后的新对象
+ */
+function cloneObject(source) {
+    var result = source, i, len;
+    if (!source
+        || source instanceof Number
+        || source instanceof String
+        || source instanceof Boolean
+        ) {
+        return result;
+    } else if (isArray(source)) {
+        result = [];
+        var resultLen = 0;
+        for (i = 0, len = source.length; i < len; i ++) {
+            result[resultLen ++] = cloneObject(source[i]);
+        }
+    } else if (isPlain(source)) {
+        result = {};
+        for (i in source) {
+            if (source.hasOwnProperty(i)) {
+                result[i] = cloneObject(source[i]);
+            }
+        }
+    }
+    return result;
+}
