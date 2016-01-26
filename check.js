@@ -335,3 +335,59 @@ var obj = {
 console.log(getObjectLength(obj));          // 3
 
 
+// 为dom增加一个样式名为newClassName的新样式
+function addClass(element, newClassName) {
+    var result;
+    var valid = typeof newClassName === 'string';
+
+    if (valid) {
+        var classes = (newClassName || '').match(/\S+/g) || [];
+        var elemClasses = element.className;
+        var cur = element.nodeType === 1 && (elemClasses ? 
+            (' ' + elemClasses + ' ').replace(/[\t\r\n\f]/g, ' ') : 
+            ' ');
+
+        if (cur) {
+            var len = classes.length;
+            for (var i = 0; i < len; i ++) {
+                if (cur.indexOf(' ' + classes[i] + ' ') < 0) {
+                    cur += classes[i] + ' ';
+                }
+            };
+
+            result = trim(cur);
+            if (elemClasses !== result) {
+                element.className = result;
+            }
+        }
+    }
+}
+
+
+// 移除dom中的样式oldClassName
+function removeClass(element, oldClassName) {
+    var result;
+    var valid = typeof oldClassName === 'string';
+
+    if (valid) {
+        var classes = (oldClassName || '').match(/\S+/g) || [];
+        var elemClasses = element.className;
+        var cur = element.nodeType === 1 && (elemClasses ?
+            (' ' + elemClasses + ' ').replace(/[\t\r\n\f]/g, ' ') : 
+            ' ');
+
+        if (cur) {
+            var len = elemClasses.length;
+            for (var i = 0; i < len; i ++) {
+                if (cur.indexOf(' ' + classes[i] + ' ') >= 0) {
+                    cur = cur.replace(' ' + classes[i] + ' ', ' ');
+                }
+            }
+
+            result = trim(cur);
+            if (elemClasses !== result) {
+                element.className = result;
+            }
+        }
+    }
+}
