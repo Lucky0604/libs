@@ -234,7 +234,7 @@ console.log(simpleTrim('  \t trimed    '));             // 'trimed'
  * real trim function
  *
  * @param {string} [source] [target]
- * @return {string} 
+ * @return {string}
  */
 function trim(str) {
     var trimer = new RegExp("(^[\\s\\t\\xa0\\u3000]+)|([\\u3000\\xa0\\s\\t]+\x24)", "g");
@@ -343,8 +343,8 @@ function addClass(element, newClassName) {
     if (valid) {
         var classes = (newClassName || '').match(/\S+/g) || [];
         var elemClasses = element.className;
-        var cur = element.nodeType === 1 && (elemClasses ? 
-            (' ' + elemClasses + ' ').replace(/[\t\r\n\f]/g, ' ') : 
+        var cur = element.nodeType === 1 && (elemClasses ?
+            (' ' + elemClasses + ' ').replace(/[\t\r\n\f]/g, ' ') :
             ' ');
 
         if (cur) {
@@ -373,7 +373,7 @@ function removeClass(element, oldClassName) {
         var classes = (oldClassName || '').match(/\S+/g) || [];
         var elemClasses = element.className;
         var cur = element.nodeType === 1 && (elemClasses ?
-            (' ' + elemClasses + ' ').replace(/[\t\r\n\f]/g, ' ') : 
+            (' ' + elemClasses + ' ').replace(/[\t\r\n\f]/g, ' ') :
             ' ');
 
         if (cur) {
@@ -391,3 +391,62 @@ function removeClass(element, oldClassName) {
         }
     }
 }
+
+
+// 判断siblingNode和dom是否为同一个父元素下的同一级的元素，返回bool值
+function isSiblingNode(element, siblingNode) {
+    return element.parentNode === siblingNode.parentNode;
+}
+
+
+// 获取dom相对于浏览器窗口的位置，返回一个对象{x, y}
+function getPosition(element) {
+    var x = 0;
+    var y = 0;
+    var current = element;
+    var pre = null;
+
+    while (current !== null) {
+        x += element.offsetLeft;
+        y += element.offsetTop;
+        pre = current;
+        current = current.offsetParent;
+    };
+
+    return {x: x, y : y};
+}
+
+
+// mini selector
+function $(selector) {
+    return document.querySelector(selector);
+}
+
+
+/**
+ * check if it is E-mail address
+ *
+ * @param {string} [emailStr] [target string]
+ * @return {boolean} [result]
+ */
+function isEmail(str) {
+    return /^([\w_\.\-\+])+\@([\w\-]+\.)+([\w]{2,10})+$/.test(str);
+}
+
+console.log(isEmail('lucky'))       // false
+console.log(isEmail('yicheng@126.com'));        // true
+
+
+
+/**
+ * check if it is mobile phone number
+ *
+ * @param {string} [phone] [target string]
+ * @return {boolean} [result]
+ */
+function isMobilePhone(phone) {
+    return /^1\d{10}$/.test(phone);
+}
+
+console.log(isMobilePhone('13333333333'));          // true
+console.log(isMobilePhone('133333333'));                // false
